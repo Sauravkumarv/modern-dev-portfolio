@@ -1,0 +1,41 @@
+import {
+  FaBrain,
+  FaCodeBranch,
+  FaDatabase,
+  FaDownload,
+  FaEnvelope,
+  FaGithub,
+  FaLinkedinIn,
+  FaNodeJs,
+  FaPython,
+  FaReact,
+  FaRegStar,
+} from "react-icons/fa";
+import {
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiScikitlearn,
+  SiTailwindcss,
+  SiTensorflow,
+} from "react-icons/si";
+
+export const iconMap = {
+  branch: FaCodeBranch,
+  brain: FaBrain,
+  database: FaDatabase,
+  download: FaDownload,
+  email: FaEnvelope,
+  express: SiExpress,
+  github: FaGithub,
+  linkedin: FaLinkedinIn,
+  mongodb: SiMongodb,
+  node: FaNodeJs,
+  postgres: SiPostgresql,
+  python: FaPython,
+  react: FaReact,
+  scikit: SiScikitlearn,
+  star: FaRegStar,
+  tailwind: SiTailwindcss,
+  tensorflow: SiTensorflow,
+};
