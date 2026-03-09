@@ -6,7 +6,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/saurav-kumar-verma-6014a722b/",
   github: "https://github.com/Sauravkumarv",
   whatsapp: "https://wa.me/917428621418",
-  resumeUrl: `${import.meta.env.BASE_URL}resume.pdf`,
+  resumeUrl: `${import.meta.env.BASE_URL}Saurav_Kumar_Verma_Resume.pdf`,
   resumeDownloadName: "Saurav_Kumar_Verma_Resume.pdf",
 };
 

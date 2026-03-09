@@ -4,10 +4,15 @@ import IconTextLink from "../ui/IconTextLink";
 import SectionHeader from "../ui/SectionHeader";
 import { contactSectionContent } from "../../data/contact";
 import { profile } from "../../data/profile";
+import { downloadFile } from "../../utils/downloadFile";
 import { iconMap } from "../../utils/iconMap";
 
 const ContactSection = () => {
   const ResumeIcon = iconMap[contactSectionContent.resume.icon];
+  const handleResumeDownload = async (event) => {
+    event.preventDefault();
+    await downloadFile(profile.resumeUrl, profile.resumeDownloadName);
+  };
 
   return (
     <section id="contact" className="content-section grid gap-6 md:grid-cols-[1fr,0.9fr]">
@@ -34,7 +39,7 @@ const ContactSection = () => {
 
         <Button
           href={contactSectionContent.resume.href}
-          download={profile.resumeDownloadName}
+          onClick={handleResumeDownload}
           className="contact-resume-button mt-6 inline-flex"
         >
           {ResumeIcon ? <ResumeIcon /> : null}
