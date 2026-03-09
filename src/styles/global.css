@@ -121,8 +121,7 @@ a {
   }
 
   .content-section {
-    content-visibility: auto;
-    contain-intrinsic-size: 800px;
+    position: relative;
   }
 
   .glass-panel::before {
@@ -1385,6 +1384,11 @@ a {
     opacity: 0.18;
   }
 
+  .app-shell::before,
+  .scene-noise {
+    display: none;
+  }
+
   .scene-orb-left {
     width: 18rem;
     height: 18rem;
@@ -1424,7 +1428,7 @@ a {
   }
 
   .glass-panel {
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(6px);
   }
 
   .app-shell {
