@@ -3,6 +3,7 @@ import Button from "../ui/Button";
 import SectionHeader from "../ui/SectionHeader";
 import ParticleCanvas from "./ParticleCanvas";
 import { heroContent } from "../../data/home";
+import { profile } from "../../data/profile";
 import useReducedMotionPreference from "../../hooks/useReducedMotionPreference";
 import { createReveal } from "../../utils/animation";
 
@@ -52,7 +53,7 @@ const HeroSection = () => {
             initial="hidden"
             animate="visible"
             variants={createReveal(prefersReducedMotion, 0.24)}
-            className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-text-soft)] sm:text-lg"
+            className="hero-description mt-6 max-w-2xl text-base leading-7 sm:text-lg"
           >
             {heroContent.description}
           </motion.p>
@@ -79,7 +80,11 @@ const HeroSection = () => {
             <Button href={heroContent.primaryAction.href}>
               {heroContent.primaryAction.label}
             </Button>
-            <Button href={heroContent.secondaryAction.href} variant="secondary">
+            <Button
+              href={heroContent.secondaryAction.href}
+              variant="secondary"
+              download={heroContent.secondaryAction.download ? profile.resumeDownloadName : undefined}
+            >
               {heroContent.secondaryAction.label}
             </Button>
           </motion.div>
@@ -99,13 +104,14 @@ const HeroSection = () => {
               </p>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {heroContent.stats.map((stat) => (
-                <div key={stat.label} className="hero-stat-card">
-                  <div className="hero-stat-value text-2xl font-bold">{stat.value}</div>
-                  <div className="hero-stat-label mt-1 text-xs uppercase tracking-[0.18em]">
-                    {stat.label}
-                  </div>
+            <div className="hero-stat-stack mt-8">
+              {heroContent.stats.map((stat, index) => (
+                <div
+                  key={stat.label}
+                  className={`hero-stat-card hero-stat-card-${index + 1}`}
+                >
+                  <div className="hero-stat-value">{stat.value}</div>
+                  <div className="hero-stat-label">{stat.label}</div>
                 </div>
               ))}
             </div>

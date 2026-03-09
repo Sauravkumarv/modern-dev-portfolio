@@ -1,10 +1,13 @@
 export const profile = {
   name: "Saurav Kumar Verma",
   title: "Full Stack Developer | AI/ML Engineer",
-  email: "hsvkumarv22@gmail.com",
-  linkedin: "https://www.linkedin.com/in/your-linkedin-handle",
-  github: "https://github.com/yourusername",
-  resumeUrl: "/resume.pdf",
+  email: "sauravkumarv22@gmail.com",
+  phone: "+91 74286 21418",
+  linkedin: "https://www.linkedin.com/in/saurav-kumar-verma-6014a722b/",
+  github: "https://github.com/Sauravkumarv",
+  whatsapp: "https://wa.me/917428621418",
+  resumeUrl: `${import.meta.env.BASE_URL}resume.pdf`,
+  resumeDownloadName: "Saurav_Kumar_Verma_Resume.pdf",
 };
 
 export const socialLinks = [

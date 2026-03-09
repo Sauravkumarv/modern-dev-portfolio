@@ -7,14 +7,14 @@ export const heroContent = {
   description:
     "I build full stack products that balance sharp frontend systems, reliable backend architecture, and practical AI workflows that are ready for real users.",
   primaryAction: { label: "View My Work", href: "#projects" },
-  secondaryAction: { label: "Contact Me", href: "#contact" },
+  secondaryAction: { label: "Download Resume", href: profile.resumeUrl, download: true },
   availability: "Open to full-time roles and high-impact freelance work",
   spotlightLabel: "Now building",
   spotlightValue: "AI-first products with polished frontend systems",
   stats: [
     { value: "3+", label: "Flagship products" },
-    { value: "Frontend-led", label: "System thinking" },
-    { value: "AI + Product", label: "Execution edge" },
+    { value: "Frontend", label: "System thinking" },
+    { value: "AI + Product", label: "Execution" },
   ],
   chips: ["React Architecture", "System Design", "Applied AI", "Scalable APIs"],
 };

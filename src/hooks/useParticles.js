@@ -32,6 +32,9 @@ const useParticles = ({ enabled = true, theme = "dark" } = {}) => {
     }
 
     let animationFrameId = 0;
+    let resizeFrameId = 0;
+    let idleCallbackId = 0;
+    let startTimeoutId = 0;
     let particles = [];
     let isDocumentVisible = !document.hidden;
     let lastFrameTime = 0;
@@ -46,19 +49,21 @@ const useParticles = ({ enabled = true, theme = "dark" } = {}) => {
           ? PARTICLE_CONFIG.mobile
           : PARTICLE_CONFIG.desktop;
 
+    let activeConfig = getConfig();
+
     const setCanvasSize = () => {
       const parent = canvas.parentElement;
       const width = parent?.clientWidth ?? window.innerWidth;
       const height = parent?.clientHeight ?? window.innerHeight;
       const ratio = Math.min(window.devicePixelRatio || 1, 1.25);
-      const config = getConfig();
+      activeConfig = getConfig();
 
       canvas.width = width * ratio;
       canvas.height = height * ratio;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      particles = createParticles(width, height, config);
+      particles = createParticles(width, height, activeConfig);
     };
 
     // Keep the canvas effect lightweight because it runs continuously behind the hero.
@@ -77,7 +82,7 @@ const useParticles = ({ enabled = true, theme = "dark" } = {}) => {
 
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-      const { linkDistance } = getConfig();
+      const { linkDistance } = activeConfig;
       const pointColor =
         theme === "dark" ? "rgba(103, 232, 249, 0.92)" : "rgba(14, 165, 233, 0.78)";
       const glowColor =
@@ -125,20 +130,43 @@ const useParticles = ({ enabled = true, theme = "dark" } = {}) => {
       animationFrameId = window.requestAnimationFrame(drawFrame);
     };
 
+    const handleResize = () => {
+      if (resizeFrameId) {
+        window.cancelAnimationFrame(resizeFrameId);
+      }
+
+      resizeFrameId = window.requestAnimationFrame(setCanvasSize);
+    };
+
     const handleVisibilityChange = () => {
       isDocumentVisible = !document.hidden;
     };
 
-    setCanvasSize();
-    drawFrame();
+    const startAnimation = () => {
+      setCanvasSize();
+      animationFrameId = window.requestAnimationFrame(drawFrame);
+    };
 
-    window.addEventListener("resize", setCanvasSize);
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = window.requestIdleCallback(startAnimation, { timeout: 600 });
+    } else {
+      startTimeoutId = window.setTimeout(startAnimation, 180);
+    }
+
+    window.addEventListener("resize", handleResize);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      window.removeEventListener("resize", setCanvasSize);
+      window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.cancelAnimationFrame(animationFrameId);
+      window.cancelAnimationFrame(resizeFrameId);
+      if ("cancelIdleCallback" in window && idleCallbackId) {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (startTimeoutId) {
+        window.clearTimeout(startTimeoutId);
+      }
     };
   }, [enabled, theme]);
 

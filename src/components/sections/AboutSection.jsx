@@ -5,7 +5,7 @@ import { aboutContent } from "../../data/home";
 const AboutSection = () => {
   return (
     <section id="about" className="content-section grid gap-6 md:grid-cols-[1.1fr,0.9fr]">
-      <Card className="p-8">
+      <Card className="p-6 sm:p-8">
         <SectionHeader
           eyebrow={aboutContent.eyebrow}
           heading={aboutContent.heading}
@@ -13,11 +13,14 @@ const AboutSection = () => {
         />
       </Card>
 
-      <Card className="p-8">
+      <Card className="about-highlights-card p-6 sm:p-8">
         <SectionHeader eyebrow={aboutContent.highlightsTitle} />
-        <ul className="mt-4 space-y-4 text-sm text-[var(--color-text-soft)]">
+        <ul className="about-highlights-list mt-6">
           {aboutContent.highlights.map((highlight) => (
-            <li key={highlight}>{highlight}</li>
+            <li key={highlight} className="about-highlight-item">
+              <span className="about-highlight-dot" aria-hidden="true" />
+              <span>{highlight}</span>
+            </li>
           ))}
         </ul>
       </Card>

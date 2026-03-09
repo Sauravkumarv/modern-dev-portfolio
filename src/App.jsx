@@ -1,23 +1,10 @@
-import { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeProvider";
-
-const HomePage = lazy(() => import("./pages/Home/HomePage"));
-
-const PageLoader = () => (
-  <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] text-[var(--color-text-soft)]">
-    Loading portfolio...
-  </div>
-);
+import HomePage from "./pages/Home/HomePage";
 
 function App() {
   return (
     <ThemeProvider>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </Suspense>
+      <HomePage />
     </ThemeProvider>
   );
 }

@@ -3,6 +3,7 @@ import Card from "../ui/Card";
 import IconTextLink from "../ui/IconTextLink";
 import SectionHeader from "../ui/SectionHeader";
 import { contactSectionContent } from "../../data/contact";
+import { profile } from "../../data/profile";
 import { iconMap } from "../../utils/iconMap";
 
 const ContactSection = () => {
@@ -10,7 +11,7 @@ const ContactSection = () => {
 
   return (
     <section id="contact" className="content-section grid gap-6 md:grid-cols-[1fr,0.9fr]">
-      <Card className="p-8">
+      <Card className="p-6 sm:p-8">
         <SectionHeader
           eyebrow={contactSectionContent.eyebrow}
           heading={contactSectionContent.heading}
@@ -18,8 +19,8 @@ const ContactSection = () => {
         />
       </Card>
 
-      <Card className="p-8">
-        <div className="space-y-4">
+      <Card className="contact-card p-6 sm:p-8">
+        <div className="contact-links space-y-4">
           {contactSectionContent.links.map((link) => (
             <IconTextLink
               key={link.href}
@@ -31,7 +32,11 @@ const ContactSection = () => {
           ))}
         </div>
 
-        <Button href={contactSectionContent.resume.href} className="mt-6 inline-flex">
+        <Button
+          href={contactSectionContent.resume.href}
+          download={profile.resumeDownloadName}
+          className="contact-resume-button mt-6 inline-flex"
+        >
           {ResumeIcon ? <ResumeIcon /> : null}
           {contactSectionContent.resume.label}
         </Button>

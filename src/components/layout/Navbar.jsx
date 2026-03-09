@@ -11,8 +11,8 @@ const Navbar = () => {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 py-4 sm:px-6 lg:px-8">
-      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between rounded-full border border-[var(--color-border)] bg-[var(--color-nav)] px-5 py-3 backdrop-blur-xl">
-        <a href="#home" className="font-display text-lg font-bold tracking-wide text-[var(--color-text)]">
+      <nav className="nav-shell mx-auto flex w-full max-w-7xl items-center justify-between rounded-full border border-[var(--color-border)] bg-[var(--color-nav)] px-5 py-3 backdrop-blur-xl">
+        <a href="#home" className="nav-brand font-display text-lg font-bold tracking-wide text-[var(--color-text)]">
           {siteMeta.brand}
         </a>
 
