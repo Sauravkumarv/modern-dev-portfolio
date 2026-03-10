@@ -1,5 +1,12 @@
 export const downloadFile = async (url, filename) => {
   const resolvedUrl = new URL(url, window.location.href).toString();
+  const mobileBrowser = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+  if (mobileBrowser) {
+    // Mobile browsers often block blob-driven PDF downloads unless the file is opened directly.
+    window.location.href = resolvedUrl;
+    return;
+  }
 
   try {
     const response = await fetch(resolvedUrl, {
