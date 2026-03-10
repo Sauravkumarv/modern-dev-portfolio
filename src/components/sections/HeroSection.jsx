@@ -3,17 +3,11 @@ import Button from "../ui/Button";
 import SectionHeader from "../ui/SectionHeader";
 import ParticleCanvas from "./ParticleCanvas";
 import { heroContent } from "../../data/home";
-import { profile } from "../../data/profile";
 import useReducedMotionPreference from "../../hooks/useReducedMotionPreference";
-import { downloadFile } from "../../utils/downloadFile";
 import { createReveal } from "../../utils/animation";
 
 const HeroSection = () => {
   const prefersReducedMotion = useReducedMotionPreference();
-  const handleResumeDownload = async (event) => {
-    event.preventDefault();
-    await downloadFile(profile.resumeUrl, profile.resumeDownloadName);
-  };
 
   return (
     <section
@@ -88,7 +82,8 @@ const HeroSection = () => {
             <Button
               href={heroContent.secondaryAction.href}
               variant="secondary"
-              onClick={heroContent.secondaryAction.download ? handleResumeDownload : undefined}
+              target={heroContent.secondaryAction.target}
+              rel={heroContent.secondaryAction.target === "_blank" ? "noopener noreferrer" : undefined}
             >
               {heroContent.secondaryAction.label}
             </Button>

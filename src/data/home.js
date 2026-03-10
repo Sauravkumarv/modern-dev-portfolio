@@ -7,7 +7,7 @@ export const heroContent = {
   description:
     "I build full stack products that balance sharp frontend systems, reliable backend architecture, and practical AI workflows that are ready for real users.",
   primaryAction: { label: "View My Work", href: "#projects" },
-  secondaryAction: { label: "Download Resume", href: profile.resumeUrl, download: true },
+  secondaryAction: { label: "View Resume", href: profile.resumeUrl, target: "_blank" },
   availability: "Open to full-time roles and high-impact freelance work",
   spotlightLabel: "Now building",
   spotlightValue: "AI-first products with polished frontend systems",
