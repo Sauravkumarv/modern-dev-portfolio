@@ -1,11 +1,14 @@
+import AppErrorBoundary from "./components/ui/AppErrorBoundary";
 import { ThemeProvider } from "./context/ThemeProvider";
 import HomePage from "./pages/Home/HomePage";
 
 function App() {
   return (
-    <ThemeProvider>
-      <HomePage />
-    </ThemeProvider>
+    <AppErrorBoundary>
+      <ThemeProvider>
+        <HomePage />
+      </ThemeProvider>
+    </AppErrorBoundary>
   );
 }
 

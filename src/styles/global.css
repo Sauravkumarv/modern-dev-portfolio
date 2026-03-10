@@ -111,6 +111,52 @@ a {
 }
 
 @layer components {
+  .app-error-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background:
+      radial-gradient(circle at top, var(--color-bg-accent), transparent 30%),
+      radial-gradient(circle at 80% 20%, var(--color-bg-secondary), transparent 24%),
+      var(--color-bg);
+  }
+
+  .app-error-card {
+    width: min(100%, 34rem);
+    padding: 2rem;
+    border-radius: 1.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .app-error-eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .app-error-title {
+    margin: 0.9rem 0 0;
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+  }
+
+  .app-error-copy {
+    margin: 1rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--color-text-soft);
+  }
+
   .glass-panel {
     @apply rounded-[2rem] backdrop-blur-md;
     background: var(--color-surface);
