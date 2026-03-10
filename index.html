@@ -19,9 +19,40 @@
       rel="stylesheet"
     />
     <title>Developer Portfolio</title>
+    <script>
+      window.__loadPagesFallback = () => {
+        const repoBase = "/modern-dev-portfolio/";
+        const isGitHubPagesHost = window.location.hostname.endsWith("github.io");
+
+        if (!isGitHubPagesHost) {
+          return;
+        }
+
+        if (!window.location.pathname.startsWith(repoBase)) {
+          window.location.replace(`${window.location.origin}${repoBase}`);
+          return;
+        }
+
+        if (!document.querySelector('link[data-pages-fallback="true"]')) {
+          const stylesheet = document.createElement("link");
+          stylesheet.rel = "stylesheet";
+          stylesheet.href = `${repoBase}assets/app.css`;
+          stylesheet.dataset.pagesFallback = "true";
+          document.head.appendChild(stylesheet);
+        }
+
+        if (!document.querySelector('script[data-pages-fallback="true"]')) {
+          const script = document.createElement("script");
+          script.type = "module";
+          script.src = `${repoBase}assets/app.js`;
+          script.dataset.pagesFallback = "true";
+          document.body.appendChild(script);
+        }
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx" onerror="window.__loadPagesFallback()"></script>
   </body>
   </html>
