@@ -7,7 +7,7 @@ const IconTextLink = ({ href, icon, label, external = false, className = "" }) =
     <a
       href={href}
       target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       className={`icon-text-link group flex items-center justify-between rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4 transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] ${className}`.trim()}
     >
       <span className="icon-text-link-label flex items-center gap-3 text-sm font-medium text-[var(--color-text)]">

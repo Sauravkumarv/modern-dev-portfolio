@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { feedbackSectionContent } from "../data/feedback";
 
 const STORAGE_KEY = "portfolio-feedback";
+const STORAGE_VERSION = 2;
 
 const readStoredEntries = () => {
   try {
@@ -14,8 +15,9 @@ const readStoredEntries = () => {
 const writeStoredEntries = (entries) => {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    return true;
   } catch {
-    // Ignore storage failures so feedback stays usable in restricted browsers.
+    return false;
   }
 };
 
@@ -27,47 +29,63 @@ const clearStoredEntries = () => {
   }
 };
 
+const getDefaultEntries = () => feedbackSectionContent.initialEntries.map(normalizeEntry);
+
 const normalizeEntry = (entry) => ({
   id: entry.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-  name: entry.name?.trim() || "Anonymous",
+  name: entry.name?.trim().slice(0, 48) || "Unknown",
   rating: Math.min(Math.max(Number(entry.rating) || 5, 1), 5),
-  comment: entry.comment?.trim() || "",
+  comment: entry.comment?.trim().slice(0, 320) || "",
   createdAt: entry.createdAt || new Date().toISOString(),
 });
 
 const getInitialEntries = () => {
   if (typeof window === "undefined") {
-    return feedbackSectionContent.initialEntries.map(normalizeEntry);
+    return getDefaultEntries();
   }
 
   const storedEntries = readStoredEntries();
 
   if (!storedEntries) {
-    return feedbackSectionContent.initialEntries.map(normalizeEntry);
+    return getDefaultEntries();
   }
 
   try {
     const parsedEntries = JSON.parse(storedEntries);
 
-    if (Array.isArray(parsedEntries) && parsedEntries.length > 0) {
-      return parsedEntries.map(normalizeEntry);
+    if (
+      parsedEntries &&
+      typeof parsedEntries === "object" &&
+      parsedEntries.version === STORAGE_VERSION &&
+      Array.isArray(parsedEntries.entries) &&
+      parsedEntries.entries.length > 0
+    ) {
+      return parsedEntries.entries.map(normalizeEntry);
     }
   } catch {
     clearStoredEntries();
   }
 
-  return feedbackSectionContent.initialEntries.map(normalizeEntry);
+  clearStoredEntries();
+  return getDefaultEntries();
 };
 
 const useFeedback = () => {
   const [entries, setEntries] = useState(getInitialEntries);
 
   const addEntry = (entry) => {
+    let persisted = false;
+
     setEntries((currentEntries) => {
       const nextEntries = [normalizeEntry(entry), ...currentEntries].slice(0, 8);
-      writeStoredEntries(nextEntries);
+      persisted = writeStoredEntries({
+        version: STORAGE_VERSION,
+        entries: nextEntries,
+      });
       return nextEntries;
     });
+
+    return { persisted };
   };
 
   const averageRating = useMemo(

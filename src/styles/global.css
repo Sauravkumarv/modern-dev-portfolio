@@ -1010,6 +1010,39 @@ a {
     transform: translateY(-1px);
   }
 
+  .feedback-input.is-invalid {
+    border-color: rgba(248, 113, 113, 0.55);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.12);
+  }
+
+  .feedback-field-helper,
+  .feedback-field-error,
+  .feedback-field-counter {
+    margin-top: 0.7rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .feedback-field-helper,
+  .feedback-field-counter {
+    color: var(--color-text-muted);
+  }
+
+  .feedback-field-error {
+    color: #f87171;
+  }
+
+  .feedback-field-meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .feedback-field-counter {
+    flex-shrink: 0;
+  }
+
   .feedback-star {
     @apply inline-flex h-11 w-11 items-center justify-center rounded-full text-lg transition;
     border: 1px solid var(--color-border);
@@ -1279,6 +1312,17 @@ a {
   .feedback-form-actions-copy {
     font-size: 0.9rem;
     color: var(--color-text-muted);
+  }
+
+  .feedback-form-actions-copy.is-success {
+    color: #4ade80;
+  }
+
+  .feedback-form-actions .primary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
   }
 
   .contact-card {

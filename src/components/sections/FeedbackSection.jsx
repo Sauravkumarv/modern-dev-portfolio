@@ -13,6 +13,12 @@ const initialFormState = {
   rating: 5,
 };
 
+const initialFormErrors = {
+  name: "",
+  comment: "",
+  rating: "",
+};
+
 const formatDate = (value) =>
   new Intl.DateTimeFormat("en-US", {
     month: "short",
@@ -31,16 +37,57 @@ const FeedbackStars = ({ rating }) => (
 const FeedbackSection = () => {
   const { entries, addEntry, averageRating } = useFeedback();
   const [formState, setFormState] = useState(initialFormState);
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
+  const [submitMessage, setSubmitMessage] = useState("");
   const marqueeEntries = useMemo(() => [...entries, ...entries, ...entries], [entries]);
+  const commentLength = formState.comment.trim().length;
+
+  const validateForm = () => {
+    const nextErrors = {
+      name: "",
+      comment: "",
+      rating: "",
+    };
+
+    const trimmedName = formState.name.trim();
+    const trimmedComment = formState.comment.trim();
+
+    if (trimmedName.length === 0) {
+      nextErrors.name = "Name is required.";
+    } else if (trimmedName.length > 48) {
+      nextErrors.name = "Name must be 48 characters or fewer.";
+    }
+
+    if (trimmedComment.length < 12) {
+      nextErrors.comment = "Comment must be at least 12 characters.";
+    } else if (trimmedComment.length > 320) {
+      nextErrors.comment = "Comment must be 320 characters or fewer.";
+    }
+
+    if (formState.rating < 1 || formState.rating > 5) {
+      nextErrors.rating = "Select a rating between 1 and 5.";
+    }
+
+    setFormErrors(nextErrors);
+    return !nextErrors.name && !nextErrors.comment && !nextErrors.rating;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setSubmitMessage("");
 
-    if (!formState.comment.trim()) {
+    if (!validateForm()) {
       return;
     }
 
-    addEntry(formState);
+    const result = addEntry(formState);
+
+    setSubmitMessage(
+      result.persisted
+        ? "Feedback posted successfully."
+        : "Feedback posted, but your browser blocked local saving."
+    );
+    setFormErrors(initialFormErrors);
     setFormState(initialFormState);
   };
 
@@ -147,14 +194,27 @@ const FeedbackSection = () => {
               </label>
               <input
                 id="feedback-name"
-                className="feedback-input"
+                className={`feedback-input ${formErrors.name ? "is-invalid" : ""}`}
                 type="text"
                 value={formState.name}
-                onChange={(event) =>
-                  setFormState((current) => ({ ...current, name: event.target.value }))
-                }
+                maxLength={48}
+                onChange={(event) => {
+                  setFormState((current) => ({ ...current, name: event.target.value }));
+                  if (formErrors.name) {
+                    setFormErrors((current) => ({ ...current, name: "" }));
+                  }
+                }}
                 placeholder={feedbackSectionContent.placeholderName}
+                aria-invalid={Boolean(formErrors.name)}
+                aria-describedby={formErrors.name ? "feedback-name-error" : undefined}
               />
+              {formErrors.name ? (
+                <p id="feedback-name-error" className="feedback-field-error">
+                  {formErrors.name}
+                </p>
+              ) : (
+                <p className="feedback-field-helper">Required. Use your real name or professional title.</p>
+              )}
             </div>
 
             <div className="feedback-rating-panel">
@@ -168,10 +228,14 @@ const FeedbackSection = () => {
                       key={ratingValue}
                       type="button"
                       className={`feedback-star ${ratingValue <= formState.rating ? "is-active" : ""}`}
-                      onClick={() =>
-                        setFormState((current) => ({ ...current, rating: ratingValue }))
-                      }
+                      onClick={() => {
+                        setFormState((current) => ({ ...current, rating: ratingValue }));
+                        if (formErrors.rating) {
+                          setFormErrors((current) => ({ ...current, rating: "" }));
+                        }
+                      }}
                       aria-label={`Rate ${ratingValue} stars`}
+                      aria-pressed={ratingValue === formState.rating}
                     >
                       <FaStar />
                     </button>
@@ -179,6 +243,9 @@ const FeedbackSection = () => {
                 })}
               </div>
               <p className="feedback-rating-hint mt-3">Tap a star to rate the experience.</p>
+              {formErrors.rating ? (
+                <p className="feedback-field-error">{formErrors.rating}</p>
+              ) : null}
             </div>
           </div>
 
@@ -188,20 +255,38 @@ const FeedbackSection = () => {
             </label>
             <textarea
               id="feedback-comment"
-              className="feedback-input min-h-32 resize-none"
+              className={`feedback-input min-h-32 resize-none ${formErrors.comment ? "is-invalid" : ""}`}
               value={formState.comment}
-              onChange={(event) =>
-                setFormState((current) => ({ ...current, comment: event.target.value }))
-              }
+              maxLength={320}
+              onChange={(event) => {
+                setFormState((current) => ({ ...current, comment: event.target.value }));
+                if (formErrors.comment) {
+                  setFormErrors((current) => ({ ...current, comment: "" }));
+                }
+              }}
               placeholder={feedbackSectionContent.placeholderComment}
+              aria-invalid={Boolean(formErrors.comment)}
+              aria-describedby="feedback-comment-meta"
             />
+            <div id="feedback-comment-meta" className="feedback-field-meta">
+              <span className={formErrors.comment ? "feedback-field-error" : "feedback-field-helper"}>
+                {formErrors.comment || "Keep it short and specific."}
+              </span>
+              <span className="feedback-field-counter">{commentLength}/320</span>
+            </div>
           </div>
 
           <div className="feedback-form-actions">
-            <p className="feedback-form-actions-copy">
-              Your response is stored in this browser instantly.
+            <p
+              className={`feedback-form-actions-copy ${submitMessage ? "is-success" : ""}`}
+              role="status"
+            >
+              {submitMessage || "Your response is stored in this browser instantly."}
             </p>
-            <button type="submit" className="primary-button">
+            <button
+              type="submit"
+              className="primary-button"
+            >
               {feedbackSectionContent.submitLabel}
             </button>
           </div>

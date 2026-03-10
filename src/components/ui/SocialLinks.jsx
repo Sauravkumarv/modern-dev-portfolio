@@ -13,7 +13,7 @@ const SocialLinks = ({ links, className = "" }) => {
             className="nav-icon-link"
             href={link.href}
             target={isExternal ? "_blank" : undefined}
-            rel={isExternal ? "noreferrer" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
             aria-label={link.label}
           >
             {Icon ? <Icon /> : null}

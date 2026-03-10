@@ -2,7 +2,6 @@ import useReducedMotionPreference from "../../hooks/useReducedMotionPreference";
 
 const BackgroundScene = () => {
   const prefersReducedMotion = useReducedMotionPreference();
-  const isLowMotionMode = true;
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
