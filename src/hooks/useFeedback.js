@@ -3,6 +3,30 @@ import { feedbackSectionContent } from "../data/feedback";
 
 const STORAGE_KEY = "portfolio-feedback";
 
+const readStoredEntries = () => {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const writeStoredEntries = (entries) => {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  } catch {
+    // Ignore storage failures so feedback stays usable in restricted browsers.
+  }
+};
+
+const clearStoredEntries = () => {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Ignore storage failures so the app still renders.
+  }
+};
+
 const normalizeEntry = (entry) => ({
   id: entry.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   name: entry.name?.trim() || "Anonymous",
@@ -16,7 +40,7 @@ const getInitialEntries = () => {
     return feedbackSectionContent.initialEntries.map(normalizeEntry);
   }
 
-  const storedEntries = window.localStorage.getItem(STORAGE_KEY);
+  const storedEntries = readStoredEntries();
 
   if (!storedEntries) {
     return feedbackSectionContent.initialEntries.map(normalizeEntry);
@@ -29,7 +53,7 @@ const getInitialEntries = () => {
       return parsedEntries.map(normalizeEntry);
     }
   } catch {
-    window.localStorage.removeItem(STORAGE_KEY);
+    clearStoredEntries();
   }
 
   return feedbackSectionContent.initialEntries.map(normalizeEntry);
@@ -41,7 +65,7 @@ const useFeedback = () => {
   const addEntry = (entry) => {
     setEntries((currentEntries) => {
       const nextEntries = [normalizeEntry(entry), ...currentEntries].slice(0, 8);
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextEntries));
+      writeStoredEntries(nextEntries);
       return nextEntries;
     });
   };
